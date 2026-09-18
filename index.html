@@ -121,7 +121,7 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
 /* --- Hero (H5 — kinetic) ----------------------------- */
 .hero {
   background: var(--hero-bg); color: var(--text-on-dark); position: relative; overflow: hidden;
-  padding: 120px 24px 100px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+  padding: 100px 24px 90px;
 }
 .hero::before {
   content: ""; position: absolute; inset: -20% -10% auto auto; width: 60%; height: 140%;
@@ -133,7 +133,11 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
   background: radial-gradient(ellipse at bottom left, rgba(224,168,62,0.16), transparent 65%);
   pointer-events: none;
 }
-.hero-content { position: relative; max-width: 760px; }
+.hero-inner { position: relative; max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+.hero-content { position: relative; max-width: 640px; }
+.hero-portrait { position: relative; justify-self: end; width: min(100%, 430px); aspect-ratio: 4 / 5; opacity: 0; animation: fade-in-up .9s cubic-bezier(.16,1,.3,1) 0.5s forwards; }
+.hero-portrait::before { content: ""; position: absolute; inset: 18px -18px -18px 18px; border: 1.5px solid var(--accent-2); border-radius: 6px; opacity: 0.55; }
+.hero-portrait img { position: relative; width: 100%; height: 100%; object-fit: cover; object-position: 50% 10%; border-radius: 6px; display: block; box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
 .hero-eyebrow { font-weight: 700; font-size: 0.82rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-2); margin-bottom: 22px; }
 .hero-name { font-size: clamp(2.6rem, 7vw, 5.2rem); font-weight: 600; line-height: 1.04; margin-bottom: 10px; }
 .kline { display: block; overflow: hidden; padding-bottom: 0.08em; }
@@ -145,7 +149,7 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
 .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fade-in-up .8s cubic-bezier(.16,1,.3,1) 1.1s forwards; }
 @keyframes fade-in-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
-  .kchar, .hero-motto, .hero-tagline, .hero-ctas { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .kchar, .hero-motto, .hero-tagline, .hero-ctas, .hero-portrait { animation: none !important; opacity: 1 !important; transform: none !important; }
 }
 .hero-scroll-indicator { display: none; }
 
@@ -288,6 +292,8 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
 
 /* --- Responsive ------------------------------------------ */
 @media (max-width: 860px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+  .hero-portrait { justify-self: start; width: min(100% - 18px, 340px); }
   .about-grid { grid-template-columns: 1fr; }
   .photo-frame { width: 128px; height: 128px; }
   .speaking-inner { grid-template-columns: 1fr; gap: 36px; }
@@ -333,6 +339,7 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
      HERO — H5 kinetic, letters build on load
      ═══════════════════════════════════════ -->
 <section class="hero" id="hero">
+  <div class="hero-inner">
   <div class="hero-content">
     <div class="hero-eyebrow">Executive Marketing Director · World Financial Group</div>
     <h1 class="hero-name">
@@ -345,6 +352,10 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
       <a href="#ventures" class="btn btn-primary">View Portfolio</a>
       <a href="#contact" class="btn btn-ghost">Get in Touch</a>
     </div>
+  </div>
+  <div class="hero-portrait">
+    <img src="assets/godwin-maledo/headshot.jpg" alt="Godwin Maledo, Executive Marketing Director at World Financial Group" width="945" height="1184">
+  </div>
   </div>
 </section>
 
