@@ -208,9 +208,46 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
 .nyxoros-fallback { font-size: 0.86rem; color: var(--text-sec-on-dark); margin: -6px 0 0; }
 .nyxoros-fallback a { color: var(--accent-2); font-weight: 700; text-decoration: none; border-bottom: 1.5px solid transparent; }
 .nyxoros-fallback a:hover { border-bottom-color: var(--accent-2); }
-.nyxoros-cal-wrap { width: 100%; max-width: 760px; min-height: 680px; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid rgba(238,242,234,0.16); background: #0e1512; }
-.nyxoros-cal-wrap iframe { width: 100%; height: 680px; border: 0; display: block; }
-@media (max-width: 640px) { .nyxoros-cal-wrap, .nyxoros-cal-wrap iframe { min-height: 560px; height: 560px; } }
+[hidden] { display: none !important; }
+.nyxoros-form-wrap { width: 100%; max-width: 620px; text-align: left; }
+.nx-form { display: flex; flex-direction: column; gap: 20px; }
+.nx-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.nx-field { display: flex; flex-direction: column; gap: 8px; }
+.nx-field label { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-sec-on-dark); }
+.nx-field input, .nx-field select {
+  width: 100%; font-family: var(--font-body); font-size: 1rem; padding: 14px 16px; border-radius: 4px;
+  border: 1.5px solid rgba(238,242,234,0.18); background: rgba(238,242,234,0.06); color: var(--text-on-dark);
+}
+.nx-field input:focus, .nx-field select:focus { border-color: var(--accent-2); outline: none; }
+.nx-select { position: relative; }
+.nx-select select { appearance: none; -webkit-appearance: none; padding-right: 44px; cursor: pointer; }
+.nx-select select:invalid { color: var(--text-sec-on-dark); }
+.nx-select select option { color: #16221b; background: #f6f2e6; }
+.nx-select::after { content: ""; position: absolute; right: 18px; top: 50%; width: 8px; height: 8px; margin-top: -6px; border-right: 2px solid var(--accent-2); border-bottom: 2px solid var(--accent-2); transform: rotate(45deg); pointer-events: none; }
+.nx-submit { align-self: flex-start; }
+.nx-error { margin: 0; font-size: 0.9rem; color: #f0a99f; }
+.nx-done { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.nx-done p { margin: 0; font-size: 1.05rem; color: var(--text-on-dark); }
+
+.nx-modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.nx-modal-scrim { position: absolute; inset: 0; background: rgba(6,14,11,0.78); backdrop-filter: blur(3px); }
+.nx-modal-card {
+  position: relative; width: min(940px, 100%); height: min(90vh, 800px); display: grid; grid-template-rows: auto 1fr auto;
+  background: #0e1512; color: var(--text-on-dark); border: 1px solid rgba(238,242,234,0.16); border-radius: 10px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+}
+.nx-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; border-bottom: 1px solid rgba(238,242,234,0.12); }
+.nx-modal-head h3 { font-size: 1.15rem; font-weight: 600; }
+.nx-close { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid rgba(238,242,234,0.3); background: transparent; color: var(--text-on-dark); font-size: 1.05rem; line-height: 1; cursor: pointer; }
+.nx-close:hover { border-color: var(--accent-2); color: var(--accent-2); }
+.nx-modal-card iframe { width: 100%; height: 100%; border: 0; display: block; background: #0e1512; }
+.nx-modal-foot { padding: 12px 20px; border-top: 1px solid rgba(238,242,234,0.12); }
+.nx-back { background: none; border: none; padding: 6px 0; font-family: var(--font-body); font-weight: 700; font-size: 0.92rem; color: var(--accent-2); cursor: pointer; }
+.nx-back:hover { text-decoration: underline; }
+@media (max-width: 640px) {
+  .nx-row { grid-template-columns: 1fr; }
+  .nx-modal { padding: 0; }
+  .nx-modal-card { width: 100%; height: 100%; border-radius: 0; border: 0; }
+}
 
 /* --- Introduction video ---------------------------------- */
 .intro { padding-block: 72px; }
@@ -439,9 +476,50 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
     <div class="section-eyebrow">Exclusively via Valtara AI</div>
     <h2 class="nyxoros-headline">Recruiting shouldn't slow down for paperwork.</h2>
     <p class="nyxoros-body">Between coaching new trainees, keeping stakeholders aligned, and hitting monthly production targets, paperwork is what eats the calendar. NyxorOS handles the operational load — so more of the week goes to recruiting, coaching, and closing, and less to admin.</p>
-    <a href="#" id="nyxoros-book-trigger" class="btn btn-primary">Request a NyxorOS Briefing</a>
-    <div class="nyxoros-cal-wrap" id="nyxoros-cal-wrap" hidden>
-      <iframe id="nyxoros-cal-frame" title="Book a NyxorOS briefing" loading="lazy"></iframe>
+    <button type="button" id="nx-open" class="btn btn-primary" aria-expanded="false" aria-controls="nx-form-wrap">Request a NyxorOS Briefing</button>
+    <div class="nyxoros-form-wrap" id="nx-form-wrap" hidden>
+      <form id="nx-form" class="nx-form">
+        <input type="hidden" name="access_key" value="81758e82-8fa7-4359-9710-9ff0bb4c74ba">
+        <input type="hidden" name="subject" value="NyxorOS Briefing Request — via Godwin Maledo portfolio">
+        <input type="hidden" name="from_name" value="Godwin Maledo Portfolio — NyxorOS">
+        <div class="nx-row">
+          <div class="nx-field">
+            <label for="nx-name">Name</label>
+            <input type="text" id="nx-name" name="name" autocomplete="name" required>
+          </div>
+          <div class="nx-field">
+            <label for="nx-email">Email</label>
+            <input type="email" id="nx-email" name="email" autocomplete="email" required>
+          </div>
+        </div>
+        <div class="nx-field">
+          <label for="nx-company">Company / Organization</label>
+          <input type="text" id="nx-company" name="company" autocomplete="organization">
+        </div>
+        <div class="nx-field">
+          <label for="nx-interest">What's driving your interest?</label>
+          <div class="nx-select">
+            <select id="nx-interest" name="interest" required>
+              <option value="" disabled selected>Select one</option>
+              <option>Agent workforce — a custom AI team for my role</option>
+              <option>Morning brief — your day summarized before you're at your desk</option>
+              <option>Portfolio &amp; breaking news — markets and headlines filtered to what matters to you</option>
+              <option>Approval governance (HITL) — nothing acts on your behalf without your sign-off</option>
+              <option>Board &amp; investor communications — document creation and send, PandaDoc-powered</option>
+              <option>Integrations — Gmail, Outlook, Calendar, and Slack under one system</option>
+              <option>Personal development — curated reading/listening</option>
+              <option>Articulation training — scored feedback on pitches and speeches</option>
+              <option>Other / not sure yet</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary nx-submit" id="nx-submit">Request Briefing</button>
+        <p class="nx-error" id="nx-error" hidden>We couldn't send that just now — your details are still filled in, so try again.</p>
+      </form>
+      <div class="nx-done" id="nx-done" hidden>
+        <p>Request received. Pick a time that works for you.</p>
+        <button type="button" class="btn btn-primary" id="nx-reopen">Open booking calendar</button>
+      </div>
     </div>
     <p class="nyxoros-fallback">Prefer email? <a href="mailto:fo@valtara.ai?subject=NyxorOS — Godwin Maledo">Reach out directly</a></p>
   </div>
@@ -510,6 +588,20 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
   </div>
 </footer>
 
+<div class="nx-modal" id="nx-modal" role="dialog" aria-modal="true" aria-labelledby="nx-modal-title" hidden>
+  <div class="nx-modal-scrim" data-nx-close></div>
+  <div class="nx-modal-card">
+    <div class="nx-modal-head">
+      <h3 id="nx-modal-title">Book your NyxorOS briefing</h3>
+      <button type="button" class="nx-close" id="nx-close" data-nx-close aria-label="Close booking and return to the site">&#10005;</button>
+    </div>
+    <iframe id="nx-cal-frame" title="Book a NyxorOS briefing with Valtara AI"></iframe>
+    <div class="nx-modal-foot">
+      <button type="button" class="nx-back" data-nx-close>&larr; Back to Godwin's site</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════
      SCRIPTS
      ═══════════════════════════════════════ -->
@@ -566,18 +658,76 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
     });
   }
 
-  var nyxTrigger = document.getElementById('nyxoros-book-trigger');
-  var nyxWrap = document.getElementById('nyxoros-cal-wrap');
-  var nyxFrame = document.getElementById('nyxoros-cal-frame');
-  if (nyxTrigger && nyxWrap && nyxFrame) {
-    nyxTrigger.addEventListener('click', function (e) {
+  var nxOpen = document.getElementById('nx-open');
+  var nxFormWrap = document.getElementById('nx-form-wrap');
+  var nxForm = document.getElementById('nx-form');
+  var nxDone = document.getElementById('nx-done');
+  var nxError = document.getElementById('nx-error');
+  var nxModal = document.getElementById('nx-modal');
+  var nxFrame = document.getElementById('nx-cal-frame');
+  var nxCloseBtn = document.getElementById('nx-close');
+  var nxReopen = document.getElementById('nx-reopen');
+  var nxReturnFocus = null;
+
+  function nxShowModal() {
+    nxReturnFocus = document.activeElement;
+    nxModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    if (nxCloseBtn) nxCloseBtn.focus();
+  }
+  function nxHideModal() {
+    nxModal.hidden = true;
+    document.body.style.overflow = '';
+    if (nxReturnFocus && nxReturnFocus.focus) nxReturnFocus.focus();
+  }
+
+  if (nxOpen && nxFormWrap && nxForm && nxModal && nxFrame) {
+    nxOpen.addEventListener('click', function () {
+      nxFormWrap.hidden = false;
+      nxOpen.hidden = true;
+      nxOpen.setAttribute('aria-expanded', 'true');
+      var first = document.getElementById('nx-name');
+      if (first) first.focus();
+    });
+
+    nxForm.addEventListener('submit', async function (e) {
       e.preventDefault();
-      if (nyxWrap.hidden) {
-        nyxFrame.src = 'https://cal.com/meet-fo/nyxor-os?embed=true&theme=dark&layout=month_view';
-        nyxWrap.hidden = false;
-        nyxTrigger.style.display = 'none';
-        nyxWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var submitBtn = document.getElementById('nx-submit');
+      var data = new FormData(nxForm);
+      submitBtn.textContent = 'Sending…';
+      submitBtn.disabled = true;
+      nxError.hidden = true;
+      try {
+        var resp = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' }
+        });
+        if (!resp.ok) throw new Error('non-ok');
+      } catch (_) {
+        submitBtn.textContent = 'Request Briefing';
+        submitBtn.disabled = false;
+        nxError.hidden = false;
+        return;
       }
+      var notes = 'Interest: ' + data.get('interest');
+      if (data.get('company')) notes += ' | Company: ' + data.get('company');
+      var params = new URLSearchParams({
+        embed: 'true', theme: 'dark', layout: 'month_view',
+        name: data.get('name'), email: data.get('email'), notes: notes
+      });
+      nxFrame.src = 'https://cal.com/meet-fo/nyxor-os?' + params.toString();
+      nxForm.hidden = true;
+      nxDone.hidden = false;
+      nxShowModal();
+    });
+
+    if (nxReopen) nxReopen.addEventListener('click', nxShowModal);
+    nxModal.querySelectorAll('[data-nx-close]').forEach(function (el) {
+      el.addEventListener('click', nxHideModal);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !nxModal.hidden) nxHideModal();
     });
   }
 
